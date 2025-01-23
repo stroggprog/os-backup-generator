@@ -154,14 +154,24 @@ integer backupRegion( string region ){
     return result;
 }
 
-setDailyTimer(){
+setDailyTimer( integer setTimer ){
     // calculate 2PM tomorrow
+    float difference;
     integer tomorrow = llGetUnixTime() % 86400; // current time today
-    integer today = llGetUnixTime() - tomorrow; // start of today
-    tomorrow = today + 86400 + (BackupHour*3600); // tomorrow 2pm
-    float difference = (float) (tomorrow - llGetUnixTime()); // diff between now and 2pm tomorrow
-    llSetTimerEvent( difference );
+    if( tomorrow < (BackupHour*3600) ){
+        //regular time later today, so do it agin then
+        difference = (BackupHour*3600) - tomorrow;
+    }
+    else {
+        integer today = llGetUnixTime() - tomorrow; // start of today
+        tomorrow = today + 86400 + (BackupHour*3600); // tomorrow 2pm
+        difference = (float) (tomorrow - llGetUnixTime()); // diff between now and 2pm tomorrow
+    }
+    
     llOwnerSay( "Timer set to go off in "+diff2Time( (integer) difference ) );
+    if( setTimer ){
+        llSetTimerEvent( difference );
+    }
 }
 
 string diff2Time( integer diff ){
