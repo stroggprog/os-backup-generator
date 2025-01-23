@@ -7,24 +7,33 @@ Requires 'osConsoleCommand()' to be enabled. This is a GOD level command. The ow
 The script is configured through a config notecard named 'config' (because I have no imagination). The notecard can contain instructions, one per line:
 
 1. Any line starting with a # is a comment and is ignored
-\# this is a comment and is ignored
+```
+# this is a comment and is ignored
+```
 
 2. A line enclosed in square brackets is echoed to the owner during startup.
+```
 [This will be echoed to the owner]
+```
 
 3. Lines in the form Region=xxx specify a region to be backed up. There may be multiple regions defined this way:
+```
 Region=My Region Name With Spaces In It
 Region=Secondary Region
 Region=Tertiary Region
+```
 
 4. A line in the form Path=xxx defines a path where the backups will be stored. This is a relative path from the simulator's bin directory. The path may (and probably should) contain a %r component, which will be replaced by the name of the region when the backups are made.
+```
 Path=oar/repos/%r/
+```
 
 Note the path must end in a trailing slash, and the folders must already exist.
 
 5. A line in the form BackupHour=nnn defines at which hour the backup is performed. The default is 14 (2PM).
+```
 BackupHour=14
-
+```
 
 The backups follow this procedure:
 1. Backups begin at 2PM daily or as set by 'BackupHour'.
