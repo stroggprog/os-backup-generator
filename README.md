@@ -51,25 +51,25 @@ The backups follow this procedure:
 1. Backups begin at 2PM daily or as set by 'BackupHour'.
 2. A daily backup is made with a filename in the following format filename:
 ```
-        D-01-Monday.oar
-        D-02-Tuesday.oar
+        01-Monday.oar
+        02-Tuesday.oar
 ```
         etc.
         At the beginning of the next week, these are overwritten.
 3. A weekly backup is made every monday in the following format filename:
 ```
-        W-06-02.oar // week #6 (of 52), falling Feb (month 02)
-        W-07-02.oar // week #7 (of 52), falling Feb (month 02)
+        06-02.oar // week #6 (of 52), falling Feb (month 02)
+        07-02.oar // week #7 (of 52), falling Feb (month 02)
 ```
         There can be 52 of these, then they start overwriting each other.
 
 4. An annual backup is made on the 31st December with the following format filename:
 ```
-        Y-2025-12-31-14:02:15.oar   // Y-year-month-day-hour-minute-second.oar
+        2025-12-31-14:02:15.oar   // year-month-day-hour-minute-second.oar
 ```
         These do not overwrite each other.
 
-The prefixes D,W,Y and the subsequent name formats allow the folder to be listed with a name order that will group the kinds (daily, weekly, yearly) together.
+Note that oar files have no prefix. Terrain files are prefixed with `terrain_` (and have `.r32` extension, and xml files have an `xml_` prefix and `.xml` extension.
 
 At the end of the backup, the script will calculate how many seconds until 2PM the next day, and set a timer event to trigger another backup at that time.
 
