@@ -6,6 +6,8 @@ The backups rotate, so there will only be 7 daily backups and 52 weekly backups 
 
 Requires 'osConsoleCommand()' to be enabled. This is a GOD level command. The owner of the script must be enabled as a god on the grid. See http://opensimulator.org/wiki/OsConsoleCommand for details.
 
+Also requires `osReplaceString` to be enabled (should be by default).
+
 The script is configured through a config notecard named 'config' (because I have no imagination). The notecard can contain instructions, one per line:
 
 1. Any line starting with a # is a comment and is ignored
