@@ -7,7 +7,7 @@ Requires 'osConsoleCommand()' to be enabled. This is a GOD level command. The ow
 The script is configured through a config notecard named 'config' (because I have no imagination). The notecard can contain instructions, one per line:
 
 1. Any line starting with a # is a comment and is ignored
-# this is a comment and is ignored
+\# this is a comment and is ignored
 
 2. A line enclosed in square brackets is echoed to the owner during startup.
 [This will be echoed to the owner]
