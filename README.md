@@ -30,7 +30,7 @@ Region=Tertiary Region
 Path=oar/repos/%r/
 ```
 
-Note the path must end in a trailing slash, and the folders must already exist with the followin sub-folders for each region:
+Note the path must end in a trailing slash, and the folders must already exist with the following sub-folders for each region:
 ```
         Daily
         Weekly
