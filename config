@@ -1,0 +1,7 @@
+# this is a notecard and should be in the same prim as the script
+[Loading config]
+Region=Barrow
+Region=Parambobulator
+Path=oar/repos/%r/
+BackupHour=14
+[Finished loading config]
