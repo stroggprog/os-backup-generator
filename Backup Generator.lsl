@@ -13,9 +13,10 @@ integer ncline;
 key rqid;
 
 string basePath;
-string daily_path;
-string weekly_path;
+string daily_path = "Daily/";
+string weekly_path = "Weekly/";
 string monthly_path;
+string yearly_path = "Yearly/";
 integer BackupHour = 14;
 
 integer SECS_DAY = 86400;
@@ -59,7 +60,10 @@ parseData( string data ){
         string value = llList2String(en,1);
         if( token == "Path" ){
             basePath = value;
-            //value = osReplaceString( value, "%r", regionName, -1, 0 );
+            string right = llGetSubString( basePath, -1, -1 );
+            if( right != "/" ){
+                basePath = basePath + "/";
+            }
         }
         else if( token == "Region" ){
             regions = regions + [value];
@@ -107,7 +111,7 @@ backupList(){
         backupRegion( llList2String( regions, i ) );
         i++;
     }
-    setDailyTimer();
+    setDailyTimer( TRUE );
 }
 
 integer consoleCommand( string command ){
@@ -121,34 +125,62 @@ integer backupRegion( string region ){
     string path;
     string oar;
     string command;
-    // first of all, do a normal weekday backup
-    path = osReplaceString( basePath, "%r", region, -1, 0 );
-    oar = "D-"+dow+"-"+day;
-    command = "save oar "+path+oar+".oar";
 
     integer result = osConsoleCommand("change region "+region);
     if( result ){
         llOwnerSay("Backing up region '"+region+"'");
-        //llOwnerSay( "Daily Backup region '"+region+"'" );
+        // first of all, do a normal weekday backup
+        path = osReplaceString( basePath, "%r", region, -1, 0 )+daily_path;
+        oar = dow+"-"+day;
+
+        // terrain file
+        command = "terrain save "+path+"terrain_"+oar+".r32";
         result = consoleCommand( command );
-        //llOwnerSay(  "Backup command completed="+result );
+
+        // xml file
+        command = "save xml2 "+path+"xml2_"+oar+".xml";
+        result = consoleCommand( command );
+
+        // oar
+        command = "save oar "+path+"oar_"+oar+".oar";
+        result = consoleCommand( command );
         
         // is this a monday? (we start the week on a monday, 'cos it makes business sense
         if( dow == "01" ){
             integer week = (time - (time % SECS_DAY)) / SECS_WEEK;
-            oar = "W-"+pad( (string)week, "00" )+"-"+getMonth();
-            command = "save oar "+path+oar+".oar";
-            //llOwnerSay( "Weekly Backup region '"+region+"'" );
+            path = osReplaceString( basePath, "%r", region, -1, 0 )+weekly_path;
+            oar = pad( (string)week, "00" )+"-"+getMonth();
+
+            // terrain file
+            command = "terrain save "+path+"terrain_"+oar+".r32";
             result = consoleCommand( command );
-            //llOwnerSay(  "Backup command completed="+result );
+
+            // xml file
+            command = "save xml2 "+path+"xml2_"+oar+".xml";
+            result = consoleCommand( command );
+
+            // oar
+            command = "save oar "+path+"oar_"+oar+".oar";
+            result = consoleCommand( command );
+
+
         }
         if( llGetSubString( llGetTimestamp(), 5, 9 ) == "12-31" ){
-            oar = "Y-"+llGetSubString( llGetTimestamp(), 0, 18 );
+            path = osReplaceString( basePath, "%r", region, -1, 0 )+yearly_path;
+            oar = llGetSubString( llGetTimestamp(), 0, 18 );
             oar = osReplaceString( oar, "T", "-", -1, 0 );
-            command = "save oar "+path+oar+".oar";
-            //llOwnerSay( "Annual Backup region '"+region+"'" );
+
+            // terrain file
+            command = "terrain save "+path+"terrain_"+oar+".r32";
             result = consoleCommand( command );
-            //llOwnerSay(  "Backup command completed="+result );
+
+            // xml file
+            command = "save xml2 "+path+"xml2_"+oar+".xml";
+            result = consoleCommand( command );
+
+            // oar
+            command = "save oar "+path+"oar_"+oar+".oar";
+            result = consoleCommand( command );
         }
     }
     return result;

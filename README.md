@@ -1,6 +1,8 @@
 # os-backup-generator
 
-Opensimulator in-world script to create daily, weekly and annual backs of regions, by invoking simulator console commands from an in-world prim.
+Opensimulator in-world script to create daily, weekly and annual backups of regions, by invoking simulator console commands from an in-world prim. It creates oar, terrain and xml backups.
+
+The backups rotate, so there will only be 7 daily backups and 52 weekly backups at most. Yearly backups are fully dated and created on the 31st Dec, and never overwrite each other. It is up to the administrator to prune these.
 
 Requires 'osConsoleCommand()' to be enabled. This is a GOD level command. The owner of the script must be enabled as a god on the grid. See http://opensimulator.org/wiki/OsConsoleCommand for details.
 
@@ -28,7 +30,17 @@ Region=Tertiary Region
 Path=oar/repos/%r/
 ```
 
-Note the path must end in a trailing slash, and the folders must already exist.
+Note the path must end in a trailing slash, and the folders must already exist with the followin sub-folders for each region:
+```
+        Daily
+        Weekly
+        Yearly
+
+        e.g. (using the Path variable above):
+        oar/repos/MyRegionName/Daily
+        oar/repos/MyRegionName/Weekly
+        oar/repos/MyRegionName/Yearly
+```
 
 5. A line in the form BackupHour=nnn defines at which hour the backup is performed. The default is 14 (2PM).
 ```
