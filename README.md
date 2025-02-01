@@ -69,8 +69,9 @@ The backups follow this procedure:
         01-Monday.oar
         02-Tuesday.oar
 ```
-        etc.
-        At the beginning of the next week, these are overwritten.
+
+   etc. At the beginning of the next week, these are overwritten.
+
   c) A weekly backup is made every Monday in the following filename format:
 
 
