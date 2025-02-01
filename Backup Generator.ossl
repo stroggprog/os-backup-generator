@@ -8,6 +8,9 @@ list regions;
 list weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 list fullWeekDays = ["Thursday","Friday","Saturday","Sunday","Monday","Tuesday","Wednesday"];
 list dowInt = [4,5,6,7,1,2,3];
+list daysInYear = [ 31, 28, 31, 30,
+                 31, 30, 31, 31,
+                 30, 31, 30, 31 ];
 
 integer ncline;
 key rqid;
@@ -78,9 +81,15 @@ integer isOn( string value ){
     return llToUpper(value) == "ON";
 }
 
-string getMonth(){
-    return pad( llGetSubString( llGetTimestamp(), 5, 6 ), "00" );
+string getMonth( string t ){
+    return pad( llGetSubString( t, 5, 6 ), "00" );
 }
+
+string getDoM( string t ){
+    return pad( llGetSubString( t, 8, 9 ), "00" );
+    //return pad( llGetSubString( "2025-01-05T16:18:41.1235489", 8, 9 ), "00" );
+}
+
 
 // contributed by wrGodLikeBeing
 string timestamp2weekday( integer ts ){
@@ -97,6 +106,36 @@ string timestamp2WeekdayInteger( integer ts ){
     integer dow = (((ts/86400)%7)+offset)%7;
     return dow;
 }
+
+// it's overkill to test for years divisible other than 4
+// but let's be complete about this.
+//
+// Years divisible by 100 are leap years...
+// Unless they are divisible by 400
+//
+integer isLeapYear( integer year ){
+    integer retval = 0;
+    if( year % 4 ){
+        retval++;
+        if( year % 400 == 0 ){
+            retval--;
+        }
+    }
+    return retval;
+}
+
+integer getMonthsInDays( integer m, integer year ){
+    integer days = 0;
+    integer i = 1;
+    while( i < m ){
+        days += llList2Integer( daysInYear, i-1 );
+        if( i == 2 && isLeapYear( year ) ){
+            days++;
+        }
+    }
+    return days;
+}
+
 
 string pad( string what, string with ){
     what = with+what;
@@ -120,6 +159,7 @@ integer consoleCommand( string command ){
 
 integer backupRegion( string region ){
     integer time = llGetUnixTime();
+    string timestamp = llGetTimestamp();
     string day = timestamp2weekday(time);
     string dow = pad( (string) timestamp2WeekdayInteger( time ), "00" );
     string path;
@@ -147,9 +187,19 @@ integer backupRegion( string region ){
         
         // is this a monday? (we start the week on a monday, 'cos it makes business sense
         if( dow == "01" ){
-            integer week = (time - (time % SECS_DAY)) / SECS_WEEK;
+            integer dom = (integer) getDoM( timestamp );
+            string pmonth = getMonth( timestamp );
+            integer month = (integer) pmonth;
+            integer doy = getMonthsInDays( month, (integer) llGetSubString( timestamp, 0, 3 ) );
+            doy += dom;
+            integer week = (integer) (doy / 7);
+            if( doy % 7 ){
+                week++;
+            }
+
+            //integer week = (time - (time % SECS_DAY)) / SECS_WEEK;
             path = osReplaceString( basePath, "%r", region, -1, 0 )+weekly_path;
-            oar = pad( (string)week, "00" )+"-"+getMonth();
+            oar = pad( (string)week, "00" )+"-"+pmonth;
 
             // terrain file
             command = "terrain save "+path+"terrain_"+oar+".r32";
