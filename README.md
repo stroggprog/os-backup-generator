@@ -79,7 +79,7 @@ The backups follow this procedure:
         06-02.oar // week #6 (of 52), falling Feb (month 02)
         07-02.oar // week #7 (of 52), falling Feb (month 02)
 ```
-        There can be 52 of these, then they start overwriting each other.
+  There can be 52 of these, then they start overwriting each other.
 
   d) An annual backup is made on the 31st December with the following filename format:
 
