@@ -91,8 +91,8 @@ Annual backups do not overwrite each other. It is up to the system administrator
 
 Note that oar files have no prefix. Terrain files are prefixed with `terrain_` and have `.r32` extension; xml files have an `xml_` prefix and `.xml` extension. The prefixes are to help with directory sorting.
 
-At the end of the backup, the script will calculate how many seconds until the next 2PM and set a timer event to trigger another backup at that time.
+At the end of the backup, the script will calculate how many seconds until the next `BackupHour` and set a timer event to trigger another backup at that time.
 
-When the script is first run, the config card is loaded and a backup immediately takes place, then the timer is set for the next backup. If the script is reset prior to 2PM (or whichever hour you have set), it is possible there will be another backup the same day. This will overwrite the daily and weekly backups created earlier in the day, but if it is December 31st, a second yearly backup is created - the filename will be different from the earlier backup so it is not overwritten.
+When the script is first run, the config card is loaded and a backup immediately takes place, then the timer is set for the next backup. If the script is reset prior to `BackupHour`, it is possible there will be another backup the same day. This will overwrite the daily and weekly backups created earlier in the day, but if it is December 31st, a second yearly backup is created - the filename will be different from the earlier backup so it is not overwritten.
 
 You should check the region console for any error messages. Note the script must be run in a region hosted by the simulator running the regions to be backed up. If a region is hosted on a different simulator, it must have it's own backup schedule run on a region hosted by that simulator.
