@@ -5,8 +5,10 @@ Opensimulator in-world script to create daily, weekly and annual backups of regi
 The backups rotate, so there will only be 7 daily backups and 52 weekly backups at most. Yearly backups are fully dated and created on the 31st Dec, and never overwrite each other. It is up to the administrator to prune these.
 
 Requires the following OSSL functions to be enabled:
+```
         osConsoleCommand        # GOD mode function!
         osReplaceString         # should be enabled by default
+```
 
 The OSSL function `osConsoleCommand` is a GOD level command. The owner of the script must be enabled as a god on the grid. See http://opensimulator.org/wiki/OsConsoleCommand for details. If you are able to set yourself as a GOD, then you should consider creating backups of the database instead as it is much more efficient. See this page on the opensimulator wiki: http://opensimulator.org/wiki/Backups
 
