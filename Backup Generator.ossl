@@ -102,24 +102,15 @@ string timestamp2WeekdayInteger( integer ts ){
     integer offset = 3;
     if( MondayStart ) offset++;
     ts = ts - (86400*2);
-    
+
     integer dow = (((ts/86400)%7)+offset)%7;
     return dow;
 }
 
-// it's overkill to test for years divisible other than 4
-// but let's be complete about this.
-//
-// Years divisible by 100 are leap years...
-// Unless they are divisible by 400
-//
 integer isLeapYear( integer year ){
     integer retval = 0;
-    if( year % 4 ){
+    if( year % 4 ){ // 2000 is also a leap year, 3000 is not
         retval++;
-        if( year % 400 == 0 ){
-            retval--;
-        }
     }
     return retval;
 }
@@ -132,6 +123,7 @@ integer getMonthsInDays( integer m, integer year ){
         if( i == 2 && isLeapYear( year ) ){
             days++;
         }
+        i++;
     }
     return days;
 }
@@ -140,7 +132,7 @@ integer getMonthsInDays( integer m, integer year ){
 string pad( string what, string with ){
     what = with+what;
     return llGetSubString( what, -llStringLength(with), -1 );
-    
+
 }
 
 backupList(){
@@ -184,9 +176,11 @@ integer backupRegion( string region ){
         // oar
         command = "save oar "+path+"oar_"+oar+".oar";
         result = consoleCommand( command );
-        
+
         // is this a monday? (we start the week on a monday, 'cos it makes business sense
-        if( dow == "01" ){
+        // every saturday = 02, 07 = sunday
+        if( dow == "07" ){
+            llOwnerSay("...Weekly Backup");
             integer dom = (integer) getDoM( timestamp );
             string pmonth = getMonth( timestamp );
             integer month = (integer) pmonth;
@@ -216,6 +210,7 @@ integer backupRegion( string region ){
 
         }
         if( llGetSubString( llGetTimestamp(), 5, 9 ) == "12-31" ){
+            llOwnerSay("...Annual Backup");
             path = osReplaceString( basePath, "%r", region, -1, 0 )+yearly_path;
             oar = llGetSubString( llGetTimestamp(), 0, 18 );
             oar = osReplaceString( oar, "T", "-", -1, 0 );
@@ -249,7 +244,7 @@ setDailyTimer( integer setTimer ){
         tomorrow = today + 86400 + (BackupHour*3600); // tomorrow 2pm
         difference = (float) (tomorrow - llGetUnixTime()); // diff between now and 2pm tomorrow
     }
-    
+
     llOwnerSay( "Timer set to go off in "+diff2Time( (integer) difference ) );
     if( setTimer ){
         llSetTimerEvent( difference );
@@ -263,7 +258,7 @@ string diff2Time( integer diff ){
     diff = diff % 60;
     return pad( (string) h, "00" )+":"+pad( (string) m, "00" )+":"+pad( (string) diff, "00" );
 }
-    
+
 default {
     state_entry() {
         llSetText("",<0,0,1>,1.0);
