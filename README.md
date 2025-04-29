@@ -30,7 +30,7 @@ The script is configured through a config notecard named 'config' (because I hav
 
   3) Lines in the form `Region=xxx` specify a region to be backed up. There may be multiple regions defined this way:
 
-```
+```lsl
 Region=My Region Name With Spaces In It
 Region=Secondary Region
 Region=Tertiary Region
